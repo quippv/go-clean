@@ -1,0 +1,45 @@
+version: '3'
+
+dotenv: 
+  - .env
+
+tasks:  
+
+  start:    
+    cmds:      
+      - swag init -g cmd/main.go
+      - air
+    desc: "Start the application with live reloading using Air" 
+
+  set:up:
+    cmds: 
+      - docker-compose down -v && docker-compose up -d
+      - sleep 5
+      - task migrate:up
+    desc: "Setup the application"
+
+  test:all:
+    cmds: 
+      - go test -v ./...
+    desc: "Test all"
+
+
+  migrate:up:    
+    cmds:
+      - goose -dir ./migrations postgres "user=$DB_USER password=$DB_PASSWORD host=$DB_HOST port=$DB_PORT dbname=$DB_NAME sslmode=disable" up
+    desc: "Run all up migrations"
+
+  migrate:down:    
+    cmds:
+      - goose -dir ./migrations postgres "user=$DB_USER password=$DB_PASSWORD host=$DB_HOST port=$DB_PORT dbname=$DB_NAME sslmode=disable" down
+    desc: "Run down migrations"
+
+  migrate:create:
+    cmds:
+      - goose -dir ./migrations create {{.name}} sql
+    desc: "Create a new migration"
+
+  psql:
+    cmds:
+      - psql "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=disable"
+    desc: "Connect to the PostgreSQL database"

@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  db:
+    container_name: 'go_clean_db'
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD', 'pg_isready', 'U', 'postgres']
+    environment:
+      - POSTGRES_DB=go-clean
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+volumes:
+  pgdata:
+  pgdata_verificator:

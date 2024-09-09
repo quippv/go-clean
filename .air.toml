@@ -1,0 +1,17 @@
+# Config file for Air
+
+# Root directory of your project
+root = "."
+# Directory to watch for changes
+tmp_dir = "tmp"
+
+# Patterns to watch for live reloading
+[build]
+cmd = "go build -o ./tmp/main ./cmd/main.go"
+full_bin = "tmp/main"
+bin = "tmp/main"
+watch_dir = ["."]
+exclude_dir = ["tmp", "migrations"]
+
+[log]
+level = "debug"
